@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.attendance.mapper.TeacherattendanceMapper">
+  <resultMap id="BaseResultMap" type="com.example.attendance.pojo.Teacherattendance">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="attence_no" jdbcType="VARCHAR" property="attenceNo" />
+    <result column="course_no" jdbcType="VARCHAR" property="courseNo" />
+    <result column="teacher_no" jdbcType="VARCHAR" property="teacherNo" />
+    <result column="attence_time" jdbcType="TIMESTAMP" property="attenceTime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, attence_no, course_no, teacher_no, attence_time
+  </sql>
+  <select id="selectByExample" parameterType="com.example.attendance.pojo.TeacherattendanceExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from teacherattendance
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from teacherattendance
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from teacherattendance
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.example.attendance.pojo.TeacherattendanceExample">
+    delete from teacherattendance
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.example.attendance.pojo.Teacherattendance">
+    insert into teacherattendance (id, attence_no, course_no, 
+      teacher_no, attence_time)
+    values (#{id,jdbcType=INTEGER}, #{attenceNo,jdbcType=VARCHAR}, #{courseNo,jdbcType=VARCHAR}, 
+      #{teacherNo,jdbcType=VARCHAR}, #{attenceTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.example.attendance.pojo.Teacherattendance">
+    insert into teacherattendance
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="attenceNo != null">
+        attence_no,
+      </if>
+      <if test="courseNo != null">
+        course_no,
+      </if>
+      <if test="teacherNo != null">
+        teacher_no,
+      </if>
+      <if test="attenceTime != null">
+        attence_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="attenceNo != null">
+        #{attenceNo,jdbcType=VARCHAR},
+      </if>
+      <if test="courseNo != null">
+        #{courseNo,jdbcType=VARCHAR},
+      </if>
+      <if test="teacherNo != null">
+        #{teacherNo,jdbcType=VARCHAR},
+      </if>
+      <if test="attenceTime != null">
+        #{attenceTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.example.attendance.pojo.TeacherattendanceExample" resultType="java.lang.Long">
+    select count(*) from teacherattendance
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update teacherattendance
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.attenceNo != null">
+        attence_no = #{record.attenceNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.courseNo != null">
+        course_no = #{record.courseNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.teacherNo != null">
+        teacher_no = #{record.teacherNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.attenceTime != null">
+        attence_time = #{record.attenceTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update teacherattendance
+    set id = #{record.id,jdbcType=INTEGER},
+      attence_no = #{record.attenceNo,jdbcType=VARCHAR},
+      course_no = #{record.courseNo,jdbcType=VARCHAR},
+      teacher_no = #{record.teacherNo,jdbcType=VARCHAR},
+      attence_time = #{record.attenceTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.attendance.pojo.Teacherattendance">
+    update teacherattendance
+    <set>
+      <if test="attenceNo != null">
+        attence_no = #{attenceNo,jdbcType=VARCHAR},
+      </if>
+      <if test="courseNo != null">
+        course_no = #{courseNo,jdbcType=VARCHAR},
+      </if>
+      <if test="teacherNo != null">
+        teacher_no = #{teacherNo,jdbcType=VARCHAR},
+      </if>
+      <if test="attenceTime != null">
+        attence_time = #{attenceTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.example.attendance.pojo.Teacherattendance">
+    update teacherattendance
+    set attence_no = #{attenceNo,jdbcType=VARCHAR},
+      course_no = #{courseNo,jdbcType=VARCHAR},
+      teacher_no = #{teacherNo,jdbcType=VARCHAR},
+      attence_time = #{attenceTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  
+  <insert id="addHistorical" parameterType="com.example.attendance.pojo.Teacherattendance">
+    insert into teacherattendance(attence_no,course_no,teacher_no,attence_time) values (#{attence_no},#{course_no},#{teacher_no},#{attence_time})
+
+  </insert>
+
+  <select id="showHistory"  resultMap="BaseResultMap" parameterType="com.example.attendance.pojo.Teacherattendance">
+   select * FROM teacherattendance
+   where teacher_no=#{username}
+  </select>
+
+</mapper>

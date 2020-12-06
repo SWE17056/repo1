@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>Layui</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link th:href="@{/layui/css/layui.css}" rel="stylesheet"   media="all">
+    <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
+</head>
+<body>
+
+
+
+<table class="layui-hide" id="demo" lay-filter="test"></table>
+
+
+
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="absent">缺勤</a>
+    <a class="layui-btn layui-btn-xs" lay-event="late">迟到</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="elay">早退</a>
+    <a class="layui-btn layui-btn-xs layui-btn-warm" lay-event="ok">签到</a>
+</script>
+
+
+
+<script th:src="@{/layui/layui.js}" charset="utf-8"></script>
+<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
+<script>
+    layui.use(['table','jquery','layer'],  function(){
+        var table = layui.table;
+        var $ = layui.$ //重点处
+            ,layer = layui.layer;
+        table.render({
+            elem: '#demo'
+            ,url:'/getattenctHistory'
+            ,cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
+            ,cols: [
+                [
+                    {checkbox: true, fixed: true}
+                    ,{field:'studentName', width:150, title: '用户名'}
+                    ,{field:'studentNo', width:150, title: '年龄', sort: true}
+                    ,{field:'attenceNo', width:150, title: '考勤描述'}
+                    ,{field:'attenceTime', width:150, title: '考勤时间'}
+                    ,{field:'address', width:150, title: '地址'}
+                    ,{field:'attenceSit', width:150, title: '考勤情况'}
+                    ,{fixed: 'right', width: 250, align:'center', toolbar: '#barDemo'}
+                ]
+            ],
+            done: function (res, curr, count) {
+                $("[data-field='attenceSit']").children().each(function () {
+                    if ($(this).text() == '0') {
+                        $(this).text("缺勤")
+                    }
+                    else if($(this).text() == '1'){
+                        $(this).text("迟到")
+                    }
+                    else if($(this).text() == '2'){
+                        $(this).text("早退")
+                    }
+                    else if($(this).text() == '3'){
+                        $(this).text("正常")
+                    }
+                });
+            }
+        });
+        //监听表格复选框选择
+        table.on('checkbox(demo)', function(obj){
+            console.log(obj)
+        });
+
+        //监听行工具事件
+        table.on('tool(test)', function(obj){ //注：tool 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
+            var data = obj.data //获得当前行数据
+                ,layEvent = obj.event; //获得 lay-event 对应的值
+
+            if(layEvent === 'absent'){
+                console.log(obj.data.attenceNo),(obj.data.attenceTime),(obj.data.studentName);
+                var data = "attence_no="+data.attenceNo+"&time="+data.attenceTime+"&stuname="+data.studentName;
+                $.ajax({
+                    type:"POST",
+                    url:'/updatesit0',  //从数据库查询返回的是个list
+                    dataType: "json",
+                    data:data
+                })
+                 obj.update({attenceSit:"缺勤"})
+            } else if(layEvent === 'late'){
+                console.log(obj.data.attenceNo),(obj.data.attenceTime),(obj.data.studentName);
+                var data = "attence_no1="+data.attenceNo+"&time1="+data.attenceTime+"&stuname1="+data.studentName;
+                $.ajax({
+                    type:"POST",
+                    url:'/updatesit1',  //从数据库查询返回的是个list
+                    dataType: "json",
+                    data:data
+                })
+                obj.update({attenceSit:"迟到"})
+            } else if(layEvent === 'elay'){
+                console.log(obj.data.attenceNo),(obj.data.attenceTime),(obj.data.studentName);
+                var data = "attence_no2="+data.attenceNo+"&time2="+data.attenceTime+"&stuname2="+data.studentName;
+                $.ajax({
+                    type:"POST",
+                    url:'/updatesit2',  //从数据库查询返回的是个list
+                    dataType: "json",
+                    data:data
+                })
+                obj.update({attenceSit:"早退"})
+            }else if(layEvent === 'ok'){
+                console.log(obj.data.attenceNo),(obj.data.attenceTime),(obj.data.studentName);
+                var data = "attence_no3="+data.attenceNo+"&time3="+data.attenceTime+"&stuname3="+data.studentName;
+                $.ajax({
+                    type:"POST",
+                    url:'/updatesit3',  //从数据库查询返回的是个list
+                    dataType: "json",
+                    data:data
+                })
+                obj.update({attenceSit:"签到"})
+            }
+        });
+
+    });
+
+</script>
+</body>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>Layui</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link th:href="@{/layui/css/layui.css}" rel="stylesheet"   media="all">
+    <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
+</head>
+<body>
+
+<table class="layui-hide" id="demo" lay-filter="test"></table>
+
+
+
+
+
+
+
+<script type="text/html" id="barDemo">
+    <a  th:href="@{'/selectmsg'}"  class="layui-btn layui-btn-primary layui-btn-xs" lay-event="check">查看</a>
+</script>
+
+
+
+<script th:src="@{/layui/layui.js}" charset="utf-8"></script>
+<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
+<script>
+    layui.use(['table','jquery','layer'],  function(){
+        var table = layui.table;
+        var $ = layui.$ //重点处
+            ,layer = layui.layer;
+        table.render({
+            elem: '#demo'
+            ,url:'/attendhistory'
+            ,cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
+            ,cols: [
+                [
+                    {checkbox: true, fixed: true}
+                    ,{field:'attenceNo', width:150, title: '签到名称'}
+                    ,{field:'courseNo', width:150, title: '课程编号', sort: true}
+                    ,{field:'teacherNo', width:150, title: '教师编号'}
+                    ,{field:'attenceTime', width:200, title: '考勤时间'}
+                    ,{fixed: 'right', width: 165, align:'center', toolbar: '#barDemo'}
+                ]
+            ],
+        });
+        //监听表格复选框选择
+        table.on('checkbox(demo)', function(obj){
+            console.log(obj)
+        });
+
+        //监听行工具事件
+        table.on('tool(test)', function(obj){ //注：tool 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
+            var data = obj.data //获得当前行数据
+                ,layEvent = obj.event; //获得 lay-event 对应的值
+
+            if(layEvent === 'check'){
+                console.log(obj.data.attenceNo),(obj.data.attenceTime);
+                var data = "msg="+data.attenceNo+"&attenceTime="+data.attenceTime;
+                $.ajax({
+                    type:"POST",
+                    url:'/attenctHistory',
+                    dataType: "json",
+                    data:data
+                })
+            }
+        });
+
+
+
+        $('.demoTable .layui-btn').on('click', function(){
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+    });
+
+</script>
+
+</body>
+</html>

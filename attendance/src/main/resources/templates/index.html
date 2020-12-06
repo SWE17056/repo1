@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>layout 后台大布局 - Layui</title>
+    <link th:href="@{/layui/css/layui.css}" rel="stylesheet" />
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        <div class="layui-logo">学生考勤系统</div>
+        <!-- 头部区域（可配合layui已有的水平导航） -->
+        <ul class="layui-nav layui-layout-left">
+                <dl class="layui-nav-child">
+                    <dd>
+                        <a href="">邮件管理</a>
+                    </dd>
+                    <dd>
+                        <a href="">消息管理</a>
+                    </dd>
+                    <dd>
+                        <a href="">授权管理</a>
+                    </dd>
+                </dl></li>
+        </ul>
+        <ul class="layui-nav layui-layout-right">
+            <li class="layui-nav-item"><a href="javascript:;">欢迎您 <span th:text="${session.username}"></span> </a>
+                <dl class="layui-nav-child">
+                    <dd>
+                        <a href="javascript:;" th:href="@{'/show'}" target="main">我的课程</a>
+                    </dd>
+                </dl></li>
+            <li class="layui-nav-item"><a href="" th:href="@{/quit}">退出</a></li>
+        </ul>
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            <ul class="layui-nav layui-nav-tree" lay-filter="test">
+                <li class="layui-nav-item layui-nav-itemed">
+                    <a class="" href="javascript:;">考勤</a>
+                    <dl class="layui-nav-child">
+                        <dd>
+                            <a href="javascript:;"  th:href="@{'/postattance'}" target="main">发布考勤</a>
+                        </dd>
+                        <dd>
+                            <a href="javascript:;"  th:href="@{'/history'}" target="main">考勤记录</a>
+                        </dd>
+                        <dd>
+                        <a href="javascript:;"  th:href="@{'/selectmsg'}" target="main">查看考勤情况</a>
+                    </dd>
+                        <dd>
+                            <a href="javascript:;"  th:href="@{'/up'}" target="main">添加学生</a>
+                        </dd>
+                    </dl></li>
+            </ul>
+        </div>
+    </div>
+    <div class="layui-body">
+        <!-- 内容主体区域 -->
+        <iframe src="https://www.xujc.com" frameborder="0" scrolling="yes" name="main" id="main" height="100%" width="100%" ></iframe>
+    </div>
+    <div class="layui-footer" align="center">
+        <!-- 底部固定区域 -->
+        © 厦门大学嘉庚学院考勤系统
+    </div>
+</div>
+<script th:src="@{/layui/layui.js}"></script>
+<script>
+    //JavaScript代码区域
+    layui.use(['element','jquery'],function() {
+        var element = layui.element;
+        var $=layui.jquery;
+        //定义一个事件，导航栏右侧
+        $("a").click(function () {
+            var url=$(this).data("url");
+            $("#option").load(url);
+        })
+
+    });
+</script>
+</body>
+</html>

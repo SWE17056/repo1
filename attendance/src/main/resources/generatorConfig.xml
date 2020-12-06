@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+    <!-- targetRuntime如果设置成MyBatis3时，会为每个表自动生成一个Example类-->
+    <context id="test" targetRuntime="MyBatis3">
+        <commentGenerator>
+            <property name="suppressAllComments" value="true"/>
+        </commentGenerator>
+
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                        connectionURL="jdbc:mysql://localhost:3306/attendance?useSSL=false"
+                        userId="root" password="root">
+        </jdbcConnection>
+
+        <!-- 配置生成pojo，targetPackage即为生成pojo的文件夹（包名）-->
+        <javaModelGenerator targetPackage="com.example.attendance.pojo"
+                            targetProject="src/main/java">
+            <property name="trimStrings" value="true" />
+        </javaModelGenerator>
+        <!-- 配置生成mapper.xml文件 -->
+        <sqlMapGenerator targetPackage="com.example.attendance.mapper" targetProject="src/main/java">
+        </sqlMapGenerator>
+        <!-- 配置生成mapper接口-->
+        <javaClientGenerator type="XMLMAPPER" targetPackage="com.example.attendance.mapper" targetProject="src/main/java">
+        </javaClientGenerator>
+
+        <!-- 设置要生成的表,domainObjectName可指定生成类的名字-->
+
+
+
+
+        <table schema="" tableName="attendance">
+        </table>
+    </context>
+</generatorConfiguration>

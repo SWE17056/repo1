@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>table模块快速使用</title>
+    <link th:href="@{/layui/css/layui.css}" rel="stylesheet" />
+</head>
+<body>
+
+<table id="demo" lay-filter="test"></table>
+
+<script th:src="@{/layui/layui.js}"></script>
+<script>
+    layui.use('table', function(){
+        var table = layui.table;
+
+        //第一个实例
+        table.render({
+            elem: '#demo'
+            ,height: 312
+            ,url: '/showinfo' //数据接口
+            ,page: false //开启分页
+            ,cols: [
+                [ //表头
+                {field: 'courseNo', title: '课程编号', width:115, sort: true}
+                ,{field: 'className', title: '课程名称', width:125}
+                ,{field: 'teacher.teacherNo', title: '教师编号', width:100,templet:'<div>{{d.teacher.teacherNo}}</div>'}
+                ,{field: 'teacher.teacherName', title: '教师姓名', width: 177,templet:'<div>{{d.teacher.teacherName}}</div>'}
+            ]
+
+            ]
+        });
+
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>layui.form小例子</title>
+    <link rel="stylesheet" th:href="@{/layui/css/layui.css}" media="all">
+</head>
+<body>
+<form class="layui-form" th:action="@{/postlist}"> <!-- 提示：如果你不想用form，你可以换成div等任何一个普通元素 -->
+    <div class="layui-form-item">
+        <label class="layui-form-label">时间</label>
+        <div class="layui-input-block">
+            <input type="text" name="date" id="modifyDate" placeholder="请输入" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">课程编号</label>
+        <div class="layui-input-block">
+            <select id="bg_id" name="bg_id" lay-verify="required"  lay-filter="business" class="select">
+                <option value="" >点击查看课程编号</option>
+            </select>
+        </div>
+    </div>
+
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">考勤方式</label>
+        <div class="layui-input-block">
+            <input type="radio" name="sex" value="0" title="数字考勤"checked>
+            <input type="radio" name="sex" value="0" title="二维码考勤" >
+        </div>
+    </div>
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">考勤描述</label>
+        <div class="layui-input-block">
+            <textarea placeholder="请输入内容 格式：XX课程XX时间XX考勤名称" name="attenceNo"  lay-verify="required" class="layui-textarea"></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit="" lay-filter="*" >立即提交</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+    <!-- 更多表单结构排版请移步文档左侧【页面元素-表单】一项阅览 -->
+</form>
+<script th:src="@{/layui/layui.js}"></script>
+<script>
+    layui.use(['jquery','form','layer'], function(){
+        var form = layui.form;
+        var $ = layui.$ //重点处
+            ,layer = layui.layer;
+        var i=1;
+        var j=0;
+
+
+            form.on('select(business)', function (data) {
+                if(j!=i) {
+                    $.ajax({
+                        type: "POST",
+                        url: '/showinfo',  //从数据库查询返回的是个list
+                        dataType: "json",
+                        success: function (data) {
+                            $.each(data.data, function (index, item) {
+                                $('#bg_id').append(new Option(item.courseNo));//往下拉菜单里添加元素
+
+                            })
+                            layui.form.render();//菜单渲染 把内容加载进去
+                            if (j != i) {
+                            layui.form.render();//菜单渲染 把内容加载进去
+                            j++;
+                        }
+
+                        }
+
+                    })
+                }
+            });
+
+    });
+</script>
+
+<script>
+
+    layui.use('laydate', function() {
+        var laydate = layui.laydate;
+        laydate.render({
+            elem: '#modifyDate', //指定元素
+            type:'datetime', // 可选择：年、月、日、时、分、秒
+            format: 'yyyy-MM-dd HH:mm:ss', //指定时间格式
+            value: new Date(), // 指定值
+        });
+    })
+</script>
+
+</body>
+</html>
